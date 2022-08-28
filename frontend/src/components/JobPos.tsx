@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {ReactFragment, useState} from 'react'
+
+
 
 interface Props {
   job: {
@@ -8,20 +10,14 @@ interface Props {
     company: string,
     status: string,
     updatedAt: number
-  },
-  handleDelete: (recordId: number, jobId: number, action: string)=>void;
+  }
+  // handleDelete: (recordId: number, jobId: number, action: string)=>void;
 }
-const JobPos: React.FC<Props> = ({job, handleDelete}) => {
+const JobPos: React.FC<Props> = ({job}) => {
+  const [open, setOpen] = useState(false);
+  return (<></>);
 
-  return (
-    <div>
-      <div>Position: {job.jobTitle}</div>
-      <div>Company: {job.company}</div>
-      <div>Status: {job.status}</div>
-      <div>Updated_at: {job.updatedAt}</div>
-      <button onClick={()=>handleDelete(job.recordId, job.jobId, 'delete')}>Delete</button>
-    </div>
-  )
 }
 
-export default JobPos
+
+export default JobPos;
