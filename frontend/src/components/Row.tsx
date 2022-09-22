@@ -9,53 +9,49 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
+import { Button } from '@mui/material';
+import { editableInputTypes } from '@testing-library/user-event/dist/utils';
 interface Props {
   row:  {
-    recordId: number,
-    jobId: number,
-    jobTitle: string,
+    position: string,
     company: string,
     status: string,
-    updatedAt: number
-  }
+    date: number,
+    id: number
+  },
+  editJob: ({company, position, id, status}: {company:string, position: string, id:number, status: string}) => void,
+  deleteJob: (id: number) => void
 }
 
-const Row: React.FC<Props> =({row}) => {
-  const [open, setOpen] = React.useState(false);
-  console.log(row);
+const Row: React.FC<Props> =({row, editJob, deleteJob}) => {
+  const [open, setOpen] = useState(false);
+  const [eCompany, setECompany] = useState(row.company);
+  const [ePosition, setEPosition] = useState(row.position);
+  const [eStatus, setEStatus] = useState(row.status);
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell align="right">{row.jobTitle}</TableCell>
         <TableCell align="right">{row.company}</TableCell>
+        <TableCell align="right">{row.position}</TableCell>
         <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">{row.updatedAt}</TableCell>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+        <TableCell align="right">{row.date}</TableCell>
+        <TableCell align="right">
+          <Button variant="contained" color="success" onClick={()=>{setOpen((status)=>!status)}}>Edit</Button>
+          <Button variant="contained" color="error"
+          onClick={()=>{deleteJob(row.id)}}>Delete</Button>
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Status</TableCell>
-                    <TableCell>UpdatedAt</TableCell>
+                    <TableCell><input  value={eCompany} onChange={(e)=>setECompany(e.target.value)}/></TableCell>
+                    <TableCell><input value={ePosition} onChange={(e)=>setEPosition(e.target.value)}/></TableCell>
+                    <TableCell><input value={eStatus} onChange={(e)=>setEStatus(e.target.value)}/></TableCell>
+                    <TableCell><Button variant="outlined" onClick={()=>{ editJob({"company":eCompany,"position": ePosition, "status": eStatus,"id": row.id}); setOpen((status)=>!status)}}>Comfirm Change</Button></TableCell>
                   </TableRow>
                 </TableHead>
               </Table>
